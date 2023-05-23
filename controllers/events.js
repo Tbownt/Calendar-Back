@@ -1,4 +1,5 @@
 const Evento = require("../models/Evento");
+const Usuario = require("../models/Usuario");
 
 const crearEventos = async (req, res) => {
   const evento = new Evento(req.body);
@@ -28,7 +29,7 @@ const getEventos = async (req, res) => {
   if (userEvents.length === 0) {
     return res.status(200).json({
       ok: true,
-      msg: `El usuario ${user?.name} no tiene eventos creados`,
+      msg: `El usuario ${user.name} no tiene eventos creados`,
     });
   }
 
