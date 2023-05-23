@@ -19,7 +19,20 @@ const crearEventos = async (req, res) => {
 const getEventos = async (req, res) => {
   //Mongo es un poco diferente a PostGreSQL, para obtener un usuario de una pseudo tabla intermedia (mongo no es una base de datos relacional)
   //se debe especificar el path con la propiedad y el valor de lo que se busca con el metodo populate
-  const eventos = await Evento.find().populate("user", "name");
+  const userId = req.uid;
+
+  let user = await Usuario.findById(userId);
+
+  let userEvents = await Evento.find({ user: user });
+
+  if (userEvents.length === 0) {
+    return res.status(200).json({
+      ok: true,
+      msg: `El usuario ${user?.name} no tiene eventos creados`,
+    });
+  }
+
+  const eventos = await Evento.find({ user }).populate("user", "name");
   res.status(200).json({ ok: true, eventos: eventos });
 };
 
